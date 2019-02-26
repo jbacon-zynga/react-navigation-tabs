@@ -1,5 +1,3 @@
-/* @flow */
-
 import * as React from 'react';
 import { View, Platform } from 'react-native';
 import { polyfill } from 'react-lifecycles-compat';
@@ -15,6 +13,7 @@ import ResourceSavingScene from '../views/ResourceSavingScene';
 type Props = InjectedProps & {
   animationEnabled?: boolean,
   lazy?: boolean,
+  renderLazyComponent?: () => JSX.Element,
   optimizationsEnabled?: boolean,
   swipeEnabled?: boolean,
   renderPager?: (props: *) => React.Node,
@@ -197,7 +196,7 @@ class MaterialTabView extends React.PureComponent<Props, State> {
       });
 
       if (!loaded.includes(index) && !mustBeVisible) {
-        return <View />;
+        return this.props.renderLazyComponent ? this.props.renderLazyComponent() : <View />;
       }
 
       if (optimizationsEnabled) {
